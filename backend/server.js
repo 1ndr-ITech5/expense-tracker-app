@@ -1,11 +1,16 @@
-const express = require('express')
-const dotenv = require('dotenv').config()
-const port = process.env.PORT || 5000
+const express = require('express');
+const dotenv = require('dotenv').config();
+const PORT = process.env.PORT || 5000;
+const {errorHandler} = require("./middleware/errorMiddleware")
+const connectDB = require('./connection/db');
 
-// init the server
 const app = express();
+connectDB();
 
-// app uses this route for endpoint requests
-app.use("/api/expenses", require('./routes/expensesRoute'))
+app.use(express.json());
 
-app.listen(port, () => console.log(`Server running on port ${port}`))
+app.use("/api/expenses", require("./routes/expensesRoute"))
+
+app.use(errorHandler)
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

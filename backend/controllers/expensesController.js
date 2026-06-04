@@ -1,17 +1,85 @@
-const getExpenses = (req, res) => {
-    res.status(200).json({message: "Get all the expenses!"})
-}
+const asyncHandler = require('express-async-handler');
+const Expense = require('../models/expensesModel');
 
-const createExpenses = (req, res) => {
-    res.status(201).json({message: "Create expense!"})
-}
 
-const updateExpenses = (req, res) => {
-    res.status(200).json({message: "Update expense!"})
-}
+const getExpenses = asyncHandler(async (req, res) => {
+    const expenses = await Expense.find()
+    res.status(200).json(expenses)
+})
 
-const deleteExpenses = (req, res) => {
-    res.status(200).json({message: "Delete expense!"})
-}
 
-module.exports = {getExpenses, createExpenses, updateExpenses, deleteExpenses}
+const createExpenses = asyncHandler(async (req, res) => {
+    const { title, amount, category } = req.body
+
+    // check if fields are filled
+    if (!title || !amount || !category) {
+        res.status(400)
+        throw new Error("Please fill all the fields!")
+    }
+
+    // check if amount has not a negative value
+    if (amount <= 0) {
+        res.status(400)
+        throw new Error("Amount cannot have a negative or zero value!")
+    }
+
+    const newExpense = await Expense.create({
+        title: title,
+        amount: amount,
+        category: category
+    })
+
+    res.status(201).json('Expense created successfully!')
+})
+
+
+const updateExpenses = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    // check if this id exists on database
+    const exists = await Expense.findById(id)
+    if (!exists) {
+        res.status(404)
+        throw new Error("This expense does not exist on database!")
+    }
+
+    // 1. Control if user has sent an amount field for update
+    if (req.body.amount !== undefined) {
+
+        // 2. Check if amount is below than zero
+        if (Number(req.body.amount) <= 0) {
+            res.status(400);
+            throw new Error('The expense amount cannot be negative or zero!');
+        }
+    }
+
+    const updatedExpense = await Expense.findByIdAndUpdate(
+        id,
+        req.body,
+        {
+            new: true,
+            runValidators: true
+        }
+    )
+
+    res.status(200).json("Expense updated successfully!")
+})
+
+
+const deleteExpenses = asyncHandler(async (req, res) => {
+    const { id } = req.params
+
+    // check for the existence of expense in db
+    const check = await Expense.findById(id)
+    if (!check) {
+        res.status(404)
+        throw new Error("This expense does not exist!")
+    }
+
+    // after we find it, we delete it
+    await Expense.findByIdAndDelete(id)
+    res.status(200).json("Expense deleted successfully!")
+})
+
+
+module.exports = { getExpenses, createExpenses, updateExpenses, deleteExpenses }
