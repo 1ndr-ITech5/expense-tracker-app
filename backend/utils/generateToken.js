@@ -7,4 +7,4 @@ const tokenGeneration = (id) => {
     )
 }
 
-module.exports = tokenGeneration;
+module.exports = {tokenGeneration};

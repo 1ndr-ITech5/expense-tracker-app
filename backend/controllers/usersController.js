@@ -14,8 +14,8 @@ const registerUser = asyncHandler(async(req,res) => {
     }
 
     // check if the given email already exists on db
-    const checkExistence = await User.findOne({email})
-    if (checkExistence) {
+    const user = await User.findOne({email})
+    if (user) {
         res.status(400)
         throw new Error("This user already exists on the database!")
     }
@@ -29,16 +29,13 @@ const registerUser = asyncHandler(async(req,res) => {
         name, email, password: hashedPassword
     })
 
-    // get the token 
-    const token = tokenGeneration(newUser._id)
-
     // check if the user its created, return a json file with his info
     if (newUser){
         res.status(201).json({
             _id: newUser._id,
             name: newUser.name,
             email: newUser.email,
-            token
+            token: tokenGeneration(newUser._id)
         })
     }else{
         res.status(400)
@@ -55,27 +52,24 @@ const logUser = asyncHandler(async(req, res) => {
     }
 
     // check if the email exists on db
-    const emailExists = await User.findOne({email})
-    if (!emailExists){
+    const user = await User.findOne({email})
+    if (!user){
         res.status(404)
         throw new Error("This user does not exists!")
     }
 
     // check if passwords match
-    const isMatch = await bcrypt.compare(password, emailExists.password)
+    const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch){
         res.status(401)
         throw new Error("Invalid password credentials!")
     }
 
-    // token generated
-    const token = tokenGeneration(emailExists._id)
-
     res.status(200).json({
-        _id: emailExists._id,
-        name: emailExists.name,
-        email: emailExists.email,
-        token
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token: tokenGeneration(user._id)
     })
 })
 

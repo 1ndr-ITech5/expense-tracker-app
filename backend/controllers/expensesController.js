@@ -3,7 +3,7 @@ const Expense = require('../models/expensesModel');
 
 
 const getExpenses = asyncHandler(async (req, res) => {
-    const expenses = await Expense.find()
+    const expenses = await Expense.find({user: req.user._id})
     res.status(200).json(expenses)
 })
 
@@ -26,7 +26,8 @@ const createExpenses = asyncHandler(async (req, res) => {
     const newExpense = await Expense.create({
         title: title,
         amount: amount,
-        category: category
+        category: category,
+        user: req.user._id
     })
 
     res.status(201).json('Expense created successfully!')
@@ -43,7 +44,19 @@ const updateExpenses = asyncHandler(async (req, res) => {
         throw new Error("This expense does not exist on database!")
     }
 
-    // 1. Control if user has sent an amount field for update
+    // 1. check if req.user info has come
+    if(!req.user){
+        res.status(401)
+        throw new Error("This user does not exist!")
+    }
+
+    // 2. check if the user that made req, is the one who owns the project for update
+    if(exists.user.toString() !== req.user._id.toString()){
+        res.status(401)
+        throw new Error("You don't have rights on updating this expense!")
+    }
+
+    // 3. Control if user has sent an amount field for update
     if (req.body.amount !== undefined) {
 
         // 2. Check if amount is below than zero
@@ -74,6 +87,18 @@ const deleteExpenses = asyncHandler(async (req, res) => {
     if (!check) {
         res.status(404)
         throw new Error("This expense does not exist!")
+    }
+
+    // 1. check if req.user info has come
+    if(!req.user){
+        res.status(401)
+        throw new Error("This user does not exist!")
+    }
+
+    // 2. check if the user that made req, is the one who owns the project for update
+    if(check.user.toString() !== req.user._id.toString()){
+        res.status(401)
+        throw new Error("You don't have rights on updating this expense!")
     }
 
     // after we find it, we delete it
