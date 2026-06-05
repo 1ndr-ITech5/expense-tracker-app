@@ -98,7 +98,7 @@ const deleteExpenses = asyncHandler(async (req, res) => {
     // 2. check if the user that made req, is the one who owns the project for update
     if(check.user.toString() !== req.user._id.toString()){
         res.status(401)
-        throw new Error("You don't have rights on updating this expense!")
+        throw new Error("You don't have rights on deleting this expense!")
     }
 
     // after we find it, we delete it

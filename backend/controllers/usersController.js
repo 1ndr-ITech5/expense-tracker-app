@@ -73,4 +73,20 @@ const logUser = asyncHandler(async(req, res) => {
     })
 })
 
-module.exports = {registerUser, logUser}
+
+const getUser = asyncHandler(async(req, res) => {
+    const user = req.user
+
+    if(user){
+        res.status(200).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email
+        })
+    }else{
+        res.status(404)
+        throw new Error("User profile not found!")
+    }
+})
+
+module.exports = {registerUser, logUser, getUser}
