@@ -9,7 +9,11 @@ connectDB();
 
 app.use(express.json());
 
+// endpoint for expenses operations
 app.use("/api/expenses", require("./routes/expensesRoute"))
+
+// endpoint for user operations
+app.use("/api/user", require("./routes/usersRoute"))
 
 app.use(errorHandler)
 
