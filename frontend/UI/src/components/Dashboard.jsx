@@ -8,6 +8,8 @@ import {useNavigate} from 'react-router-dom';
 const Dashboard = () => {
 
     const nav = useNavigate();
+    // init our postman here
+    const dispatch = useDispatch();
 
     const { user } = useSelector((state) => state.user);
 
@@ -43,9 +45,6 @@ const Dashboard = () => {
     
     const totalDaysCount = uniqueDays.size;
     const avgExpenses = totalDaysCount > 0 ? (totalExpenses / totalDaysCount) : 0;
-
-    // init our postman here
-    const dispatch = useDispatch();
 
     return (
         <div>

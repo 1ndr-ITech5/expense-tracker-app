@@ -1,30 +1,27 @@
-import { useAddExpenseMutation } from '../store/apis/expenseapi';
+import { useUpdateExpenseMutation } from '../store/apis/expenseapi';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const AddExpense = () => {
+const UpdateExpense = ({expense, setUpdatePage = () => {}}) => {
 
     const nav = useNavigate();
 
-    const [title, setTitle] = useState("")
-    const [amount, setAmount] = useState("")
-    const [category, setCategory] = useState("")
-    const [addExpense] = useAddExpenseMutation()
+    const [title, setTitle] = useState(expense.title)
+    const [amount, setAmount] = useState(expense.amount)
+    const [category, setCategory] = useState(expense.category)
+    const [updateExpense] = useUpdateExpenseMutation();
 
-    //handle sumbit logic
-    const handleSubmit = async(e) => {
+    //handle submit logic
+    const handleUpdate = async(e) => {
         e.preventDefault();
 
-        const newExpense = {
+        const updatedExpense = {
             title, amount, category
         }
 
         try{
-            await addExpense(newExpense)
-            setTitle("")
-            setAmount("")
-            setCategory("")
-            nav("/dashboard")
+            await updateExpense({ id: expense._id, updatedData: updatedExpense })
+            setUpdatePage(false)
         }catch(error){
             console.log(`Error: ${error}`)
         }
@@ -32,10 +29,10 @@ const AddExpense = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <button type="button" onClick={() => nav("/dashboard")}>Go Back</button>
+        <form onSubmit={handleUpdate}>
+            <button type="button" onClick={() => nav(-1)}>Go Back</button>
             <div className="header-add">
-                <h1>Add your newest expense!</h1>
+                <h1>Update your expense!</h1>
                 <h3>Fill the fields down below!</h3>
             </div>
             <div className="title">
@@ -48,7 +45,7 @@ const AddExpense = () => {
             </div>
             <div className="category">
                 <label>Category</label>
-                <select onChange={(e) => setCategory(e.target.value)}>
+                <select value={category} onChange={(e) => setCategory(e.target.value)}>
                     <option value="all">All</option>
                     <option value="Food">Food</option>
                     <option value="Transport">Transport</option>
@@ -59,9 +56,9 @@ const AddExpense = () => {
                     <option value="Other">Other</option>
                 </select>
             </div>
-            <button>Add Expense</button>
+            <button>Update Expense</button>
         </form>
     )
 }
 
-export default AddExpense;
+export default UpdateExpense;
