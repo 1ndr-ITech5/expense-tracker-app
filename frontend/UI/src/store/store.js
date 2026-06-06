@@ -1,10 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit';
-import userReducer from './userSlice.js'
+import userReducer from './userSlice.js';
+import filterReducer from "./filterSlice";
 import { expenseApi } from './apis/expenseApi';
 
 export const store = configureStore({
     reducer: {
-        auth: userReducer,
+        user: userReducer,
+        filters: filterReducer,
         [expenseApi.reducerPath]: expenseApi.reducer
     },
     middleware: (getDefaultMiddleware) =>

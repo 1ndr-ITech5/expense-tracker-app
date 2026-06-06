@@ -1,12 +1,22 @@
 import { useGetExpensesQuery } from '../store/apis/expenseApi';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { FaPlus } from "react-icons/fa";
+import ExpensesCard from './ExpensesCard'
 
 const Dashboard = () => {
 
-    const { user } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.user);
 
     // states of the components managed by expense Api
     const { data: expenses = [], isLoading, error } = useGetExpensesQuery();
+
+    // initial states of filters
+    const { categoryFilter, dateFilter } = useSelector((state) => state.filters);
+
+    const { data } = useGetExpensesQuery({
+        category: categoryFilter,
+        date: dateFilter,
+    });
 
     // in loading phase
     if(isLoading){
@@ -35,6 +45,9 @@ const Dashboard = () => {
     const totalDaysCount = uniqueDays.size;
     const avgExpenses = totalDaysCount > 0 ? (totalExpenses / totalDaysCount) : 0;
 
+    // init our postman here
+    const dispatch = useDispatch();
+
     return (
         <div>
             <div className="dash-info">
@@ -54,6 +67,36 @@ const Dashboard = () => {
                     <h3>Average Expenses</h3>
                     <p>{avgExpenses}ALL</p>
                 </div>
+            </div>
+            <div className="options">
+                <button>{<FaPlus />} Add New Expense</button>
+                <div>
+                    <label>Filter by Category</label>
+                    <select onChange={(e) => dispatch(setCategoryFilter(e.target.value))}>
+                        <option value="all">All</option>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Health">Health</option>
+                        <option value="Other">Other</option>               
+                    </select>
+                </div>
+                <div>
+                    <label>Filter by Period</label>
+                    <select onChange={(e) => dispatch(setDateFilter(e.target.value))}>
+                        <option value="all">All</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                </div>
+            </div>
+            <div className="cards-container">
+                {expenses.map((item) => (
+                    <ExpensesCard key={item._id} expense={item}/>
+                ))}
             </div>
         </div>
     )
