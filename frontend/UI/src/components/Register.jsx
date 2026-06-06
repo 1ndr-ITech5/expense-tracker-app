@@ -1,6 +1,8 @@
 import {useState} from 'react'
 import authService from '../services/authService.js'
 import {useNavigate} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import { setUser } from '../store/userSlice';
 
 const Register = () => {
 
@@ -11,6 +13,7 @@ const Register = () => {
     const [error, setError] = useState("")
 
     const nav = useNavigate()
+    const dispatch = useDispatch();
 
     const handleSubmit = async(e) => {
         e.preventDefault(); // makes sure to not re-render the page after submit event
@@ -18,6 +21,7 @@ const Register = () => {
 
         try{
             const userData = await authService.register({name,email,password})
+            dispatch(setUser(userData))
             nav("/dashboard")
         }catch (error) {
             const message = error.response?.data?.message || 'Something went wrong!';

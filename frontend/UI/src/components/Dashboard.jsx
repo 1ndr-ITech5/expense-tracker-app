@@ -2,30 +2,26 @@ import { useGetExpensesQuery } from '../store/apis/expenseApi';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaPlus } from "react-icons/fa";
 import ExpensesCard from './ExpensesCard'
+import { setCategoryFilter, setDateFilter } from '../store/filterSlice';
 
 const Dashboard = () => {
 
     const { user } = useSelector((state) => state.user);
 
-    // states of the components managed by expense Api
-    const { data: expenses = [], isLoading, error } = useGetExpensesQuery();
-
     // initial states of filters
     const { categoryFilter, dateFilter } = useSelector((state) => state.filters);
 
-    const { data } = useGetExpensesQuery({
-        category: categoryFilter,
-        date: dateFilter,
-    });
+    // states of the components managed by expense Api
+    const { data: expenses = [], isLoading, error } = useGetExpensesQuery(user?._id);
 
     // in loading phase
     if(isLoading){
-        <h3>Page currently loading...</h3>
+        return <h3>Page currently loading...</h3>
     }
 
     // when error is faced
     if(error){
-        <h3>Page faced error: {error?.data?.message || 'Data not fetched!'}</h3>
+        return <h3>Page faced error: {error?.data?.message || 'Data not fetched!'}</h3>
     }
 
     // get today's date
