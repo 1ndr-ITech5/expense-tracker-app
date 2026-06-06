@@ -2,6 +2,7 @@ import {useState} from 'react'
 import authService from '../services/authService.js'
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
+import { setUser } from '../store/userSlice';
 
 const Login = () => {
 
@@ -22,6 +23,7 @@ const Login = () => {
             dispatch(setUser(userData))
             nav("/dashboard")
         }catch (error) {
+            console.log(error)
             const message = error.response?.data?.message || 'Something went wrong!';
             setError(message);
         }
