@@ -3,8 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FaPlus } from "react-icons/fa";
 import ExpensesCard from './ExpensesCard'
 import { setCategoryFilter, setDateFilter } from '../store/filterSlice';
+import {useNavigate} from 'react-router-dom';
 
 const Dashboard = () => {
+
+    const nav = useNavigate();
 
     const { user } = useSelector((state) => state.user);
 
@@ -65,7 +68,7 @@ const Dashboard = () => {
                 </div>
             </div>
             <div className="options">
-                <button>{<FaPlus />} Add New Expense</button>
+                <button onClick={() => nav("/add-expense")}>{<FaPlus />} Add New Expense</button>
                 <div>
                     <label>Filter by Category</label>
                     <select onChange={(e) => dispatch(setCategoryFilter(e.target.value))}>

@@ -4,6 +4,7 @@ import Register from './components/Register.jsx';
 import Login from './components/Login.jsx';
 import Header from './components/Header.jsx';
 import Navbar from './components/Navbar.jsx';
+import AddExpense from './components/AddExpense.jsx';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
+          <Route path="/add-expense" element={<AddExpense/>}/>
         </Routes>
       </div>
     </BrowserRouter>

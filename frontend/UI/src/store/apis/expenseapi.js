@@ -1,25 +1,39 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const expenseApi = createApi({
-  reducerPath: 'expenseApi',
+  reducerPath: "expenseApi",
+
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5000/api/',
+    baseUrl: "http://localhost:5000/api/",
     prepareHeaders: (headers, { getState }) => {
       const token =
         getState()?.auth?.user?.token ||
-        JSON.parse(localStorage.getItem('user') || 'null')?.token;
+        JSON.parse(localStorage.getItem("user") || "null")?.token;
 
       if (token) {
-        headers.set('authorization', `Bearer ${token}`);
+        headers.set("authorization", `Bearer ${token}`);
       }
+
       return headers;
     },
   }),
+
   endpoints: (builder) => ({
     getExpenses: builder.query({
-      query: () => 'expenses',
+      query: () => "expenses",
+    }),
+
+    addExpense: builder.mutation({
+      query: (newExpense) => ({
+        url: "expenses",
+        method: "POST",
+        body: newExpense,
+      }),
     }),
   }),
 });
 
-export const { useGetExpensesQuery } = expenseApi;
+export const {
+  useGetExpensesQuery,
+  useAddExpenseMutation,
+} = expenseApi;
