@@ -4,7 +4,7 @@ export const expenseApi = createApi({
   reducerPath: "expenseApi",
   tagTypes: ['Expense'],
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/",
+    baseUrl: `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/`,
     prepareHeaders: (headers, { getState }) => {
       const token = getState()?.user?.token || JSON.parse(localStorage.getItem('user'))?.token;
 
