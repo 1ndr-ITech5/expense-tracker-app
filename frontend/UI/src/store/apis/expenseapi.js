@@ -2,13 +2,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const expenseApi = createApi({
   reducerPath: "expenseApi",
-
+  tagTypes: ['Expense'],
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000/api/",
     prepareHeaders: (headers, { getState }) => {
-      const token =
-        getState()?.auth?.user?.token ||
-        JSON.parse(localStorage.getItem("user") || "null")?.token;
+      const token = getState()?.user?.token || JSON.parse(localStorage.getItem('user'))?.token;
 
       if (token) {
         headers.set("authorization", `Bearer ${token}`);
@@ -21,6 +19,7 @@ export const expenseApi = createApi({
   endpoints: (builder) => ({
     getExpenses: builder.query({
       query: () => "expenses",
+      providesTags: ['Expense'],
     }),
 
     addExpense: builder.mutation({
@@ -29,6 +28,7 @@ export const expenseApi = createApi({
         method: "POST",
         body: newExpense,
       }),
+      invalidatesTags: ['Expense'],
     }),
 
     updateExpense: builder.mutation({
@@ -37,13 +37,15 @@ export const expenseApi = createApi({
         method: "PUT",
         body: updatedData,
       }),
+      invalidatesTags: ['Expense'],
     }),
 
     deleteExpense: builder.mutation({
       query: (id) => ({
         url: `expenses/${id}`,
-        method: "DELETE"
+        method: "DELETE",
       }),
+      invalidatesTags: ['Expense'],
     }),
   }),
 });

@@ -1,4 +1,4 @@
-import { useAddExpenseMutation } from '../store/apis/expenseapi';
+import { useAddExpenseMutation } from '../store/apis/expenseApi';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,17 +18,17 @@ const AddExpense = () => {
         const newExpense = {
             title, amount, category
         }
-
-        try{
-            await addExpense(newExpense)
-            setTitle("")
-            setAmount("")
-            setCategory("")
-            nav("/dashboard")
-        }catch(error){
-            console.log(`Error: ${error}`)
+    
+        const result = await addExpense(newExpense)
+        if(result.error){
+            console.log(`Mutation failed: ${result.error}`)
+            return;
         }
 
+        setTitle("")
+        setAmount("")
+        setCategory("")
+        nav("/dashboard")
     }
 
     return (

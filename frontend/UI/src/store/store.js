@@ -1,14 +1,14 @@
 import {configureStore} from '@reduxjs/toolkit';
 import userReducer from './userSlice.js';
 import filterReducer from "./filterSlice";
-import { expenseApi } from './apis/expenseApi';
+import { expenseApi } from './apis/expenseApi.js';
 
 export const store = configureStore({
     reducer: {
         user: userReducer,
         filters: filterReducer,
-        [expenseApi.reducerPath]: expenseApi.reducer
+        [expenseApi.reducerPath]: expenseApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(expenseApi.middleware)
+    getDefaultMiddleware().concat(expenseApi.middleware),
 })

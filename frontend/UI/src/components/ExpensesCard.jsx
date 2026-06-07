@@ -2,7 +2,7 @@ import { GrDocumentUpdate } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 import { useState } from "react";
 import UpdateExpense from "./UpdateExpense";
-import { useDeleteExpenseMutation } from '../store/apis/expenseapi';
+import { useDeleteExpenseMutation } from '../store/apis/expenseApi';
 
 const ExpensesCard = ({ expense }) => {
   const [updatePage, setUpdatePage] = useState(false);

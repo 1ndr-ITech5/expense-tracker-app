@@ -1,4 +1,4 @@
-import { useUpdateExpenseMutation } from '../store/apis/expenseapi';
+import { useUpdateExpenseMutation } from '../store/apis/expenseApi';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,13 +19,12 @@ const UpdateExpense = ({expense, setUpdatePage = () => {}}) => {
             title, amount, category
         }
 
-        try{
-            await updateExpense({ id: expense._id, updatedData: updatedExpense })
-            setUpdatePage(false)
-        }catch(error){
-            console.log(`Error: ${error}`)
+        const result = await updateExpense({ id: expense._id, updatedData: updatedExpense })
+        if(result.error){
+            console.log(`Mutation failed: ${result.error}`)
+            return;
         }
-
+        setUpdatePage(false)
     }
 
     return (

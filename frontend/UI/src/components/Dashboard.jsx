@@ -17,7 +17,7 @@ const Dashboard = () => {
     const { categoryFilter, dateFilter } = useSelector((state) => state.filters);
 
     // states of the components managed by expense Api
-    const { data: expenses = [], isLoading, error } = useGetExpensesQuery(user?._id);
+    const { data: expenses = [], isLoading, error } = useGetExpensesQuery(user?._id, {skip: !user?._id,});
 
     // in loading phase
     if(isLoading){
