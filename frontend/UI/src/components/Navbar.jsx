@@ -1,18 +1,30 @@
+import { NavLink } from 'react-router-dom';
 import Logo from '../assets/logo.png';
+import '../styles/navbar.css';
+import {useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
+
+    const nav = useNavigate();
+
     return (
         <div className="navbar">
-            <img src={Logo}/>
-            <div>
+            <img onClick={() => nav("/dashboard")} src={Logo} alt="logo" />
+            <nav>
                 <ul>
-                    <li>Dashboard</li>
-                    <li>Add Expense</li>
-                    <li>Profile</li>
+                    <li>
+                        <NavLink to="/dashboard">Dashboard</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/add-expense">Add Expense</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/profile">Profile</NavLink>
+                    </li>
                 </ul>
-            </div>
+            </nav>
         </div>
-    )
-}
+    );
+};
 
 export default Navbar;

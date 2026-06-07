@@ -20,7 +20,7 @@ const Header = () => {
 return (
     <header className='header'>
         <div className="logo">
-            <Link to='/login'>Expense-Tracker App</Link>
+            <h4>Expense-Tracker App</h4>
         </div>
         {!user ? 
         (<ul>

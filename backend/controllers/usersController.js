@@ -35,7 +35,8 @@ const registerUser = asyncHandler(async(req,res) => {
             _id: newUser._id,
             name: newUser.name,
             email: newUser.email,
-            token: tokenGeneration(newUser._id)
+            token: tokenGeneration(newUser._id),
+            createdAt: newUser.createdAt
         })
     }else{
         res.status(400)
@@ -69,7 +70,8 @@ const logUser = asyncHandler(async(req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        token: tokenGeneration(user._id)
+        token: tokenGeneration(user._id),
+        createdAt: user.createdAt
     })
 })
 
@@ -81,7 +83,8 @@ const getUser = asyncHandler(async(req, res) => {
         res.status(200).json({
             _id: user._id,
             name: user.name,
-            email: user.email
+            email: user.email,
+            createdAt: user.createdAt
         })
     }else{
         res.status(404)

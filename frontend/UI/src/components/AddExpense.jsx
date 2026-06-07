@@ -35,7 +35,7 @@ const AddExpense = () => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <button type="button" onClick={() => nav("/dashboard")}>Go Back</button>
+            <button type="button" onClick={() => nav(-1)}>Go Back</button>
             <div className="header-add">
                 <h1>Add your newest expense!</h1>
                 <h3>Fill the fields down below!</h3>
