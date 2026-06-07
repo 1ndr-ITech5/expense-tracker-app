@@ -1,5 +1,4 @@
 {
-  "rootDirectory": "frontend/UI",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
