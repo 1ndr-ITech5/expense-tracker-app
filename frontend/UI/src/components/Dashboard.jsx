@@ -4,6 +4,7 @@ import { FaPlus } from "react-icons/fa";
 import ExpensesCard from './ExpensesCard'
 import { setCategoryFilter, setDateFilter } from '../store/filterSlice';
 import {useNavigate} from 'react-router-dom';
+import Spinner from './Spinner';
 
 const Dashboard = () => {
 
@@ -47,9 +48,7 @@ const Dashboard = () => {
     });
 
     // in loading phase
-    if(isLoading){
-        return <h3>Page currently loading...</h3>
-    }
+    if(isLoading) {return <Spinner/> }
 
     // when error is faced
     if(error){
@@ -76,7 +75,7 @@ const Dashboard = () => {
     return (
         <div>
             <div className="dash-info">
-                <h1>Welcome {user ? user.name : 'Guest'}👋</h1>
+                <h1>Hello {user ? user.name : 'Guest'}👋</h1>
                 <h3>What have you spent today?</h3>
             </div>
             <div className="info-tables">

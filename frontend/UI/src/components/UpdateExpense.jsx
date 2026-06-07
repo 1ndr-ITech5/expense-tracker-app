@@ -1,18 +1,17 @@
 import { useUpdateExpenseMutation } from '../store/apis/expenseApi';
 import { useState } from 'react';
+import {toast} from 'react-toastify';
 
 const UpdateExpense = ({expense, setUpdatePage = () => {}}) => {
 
     const [title, setTitle] = useState(expense.title)
     const [amount, setAmount] = useState(expense.amount)
     const [category, setCategory] = useState(expense.category)
-    const [error, setError] = useState("")
     const [updateExpense] = useUpdateExpenseMutation();
 
     //handle submit logic
     const handleUpdate = async(e) => {
         e.preventDefault();
-        setError("")
 
         const updatedExpense = {
             title, amount, category
@@ -20,9 +19,10 @@ const UpdateExpense = ({expense, setUpdatePage = () => {}}) => {
 
         const result = await updateExpense({ id: expense._id, updatedData: updatedExpense })
         if(result.error){
-            setError(result.error.data.message)
+            toast.error(result.error.data.message)
             return;
         }
+        toast.success("Expense updated successfully!")
         setUpdatePage(false)
     }
 
@@ -32,7 +32,6 @@ const UpdateExpense = ({expense, setUpdatePage = () => {}}) => {
             <div className="header-add">
                 <h1>Update your expense!</h1>
                 <h3>Fill the fields down below!</h3>
-                {error && <p style={{color: 'red'}}>{error}</p>}
             </div>
             <div className="title">
                 <label>Title</label>

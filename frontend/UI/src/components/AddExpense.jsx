@@ -1,6 +1,7 @@
 import { useAddExpenseMutation } from '../store/apis/expenseApi';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {toast} from 'react-toastify';
 
 const AddExpense = () => {
 
@@ -9,13 +10,12 @@ const AddExpense = () => {
     const [title, setTitle] = useState("")
     const [amount, setAmount] = useState("")
     const [category, setCategory] = useState("")
-    const [error, setError] = useState("")
     const [addExpense] = useAddExpenseMutation()
 
     //handle sumbit logic
     const handleSubmit = async(e) => {
         e.preventDefault();
-        setError("")
+
 
         const newExpense = {
             title, amount, category
@@ -23,10 +23,11 @@ const AddExpense = () => {
 
         const result = await addExpense(newExpense)
         if(result.error){
-            setError(result.error.data.message)
+            toast.error(result.error.data.message)
             return;
         }   
 
+        toast.success("Expense created successfully!")
         setTitle("")
         setAmount("")
         setCategory("")
@@ -39,7 +40,6 @@ const AddExpense = () => {
             <div className="header-add">
                 <h1>Add your newest expense!</h1>
                 <h3>Fill the fields down below!</h3>
-                {error && <p style={{color: 'red'}}>{error}</p>}
             </div>
             <div className="title">
                 <label>Title</label>

@@ -3,17 +3,19 @@ import { MdDelete } from "react-icons/md";
 import { useState } from "react";
 import UpdateExpense from "./UpdateExpense";
 import { useDeleteExpenseMutation } from '../store/apis/expenseApi';
+import {toast} from 'react-toastify';
 
 const ExpensesCard = ({ expense }) => {
   const [updatePage, setUpdatePage] = useState(false);
   const [deleteExpense] = useDeleteExpenseMutation();
 
   const handleDelete = async() => {
-    try{
-        await deleteExpense(expense._id)
-    }catch(error){
-        console.log(error)
-    }
+      const result = await deleteExpense(expense._id)
+      if(result.error){
+        toast.error(result.error.data.message)
+        return;
+      }
+      toast.success("Expense deleted successfully!")  
   }
 
   return (

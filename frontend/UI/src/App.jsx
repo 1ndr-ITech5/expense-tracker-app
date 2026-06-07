@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {ToastContainer} from 'react-toastify';
 import Dashboard from './components/Dashboard.jsx';
 import Register from './components/Register.jsx';
 import Login from './components/Login.jsx';
@@ -25,6 +26,7 @@ const App = () => {
                         <Route path="/profile" element={<Profile />} />
                     </Route>
                 </Routes>
+                <ToastContainer/>
             </div>
         </BrowserRouter>
     );

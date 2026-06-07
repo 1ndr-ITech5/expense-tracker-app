@@ -3,6 +3,7 @@ import authService from '../services/authService.js'
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import { setUser } from '../store/userSlice';
+import {toast} from 'react-toastify';
 
 const Register = () => {
 
@@ -10,28 +11,25 @@ const Register = () => {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [error, setError] = useState("")
 
     const nav = useNavigate()
     const dispatch = useDispatch();
 
     const handleSubmit = async(e) => {
         e.preventDefault(); // makes sure to not re-render the page after submit event
-        setError("")
 
         try{
             const userData = await authService.register({name,email,password})
+            toast.success("User registered! Welcome!")
             dispatch(setUser(userData))
             nav("/dashboard")
         }catch (error) {
-            const message = error.response?.data?.message || 'Something went wrong!';
-            setError(message);
+            toast.error(error.response?.data?.message || 'Something went wrong!');
         }
     }
 
     return (
         <form onSubmit={handleSubmit}>
-            {error && <p style={{color: 'red'}}>{error}</p>}
             <div className="register-info">
                 <h1>Welcome to Expense Tracker App!</h1>
                 <h2>Register to manage your own expenses!</h2>

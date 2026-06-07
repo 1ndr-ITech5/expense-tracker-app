@@ -3,35 +3,32 @@ import authService from '../services/authService.js'
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import { setUser } from '../store/userSlice';
+import {toast} from 'react-toastify';
 
 const Login = () => {
 
     // defining the states
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [error, setError] = useState("")
 
     const nav = useNavigate()
     const dispatch = useDispatch();
 
     const handleSubmit = async(e) => {
         e.preventDefault(); // makes sure to not re-render the page after submit event
-        setError("")
 
         try{
             const userData = await authService.login({email,password})
+            toast.success("User logged successfully!")
             dispatch(setUser(userData))
             nav("/dashboard")
         }catch (error) {
-            console.log(error)
-            const message = error.response?.data?.message || 'Something went wrong!';
-            setError(message);
+            toast.error(error.response?.data?.message || 'Something went wrong!')
         }
     }
 
     return (
         <form onSubmit={handleSubmit}>
-            {error && <p style={{color: 'red'}}>{error}</p>}
             <div className="register-info">
                 <h1>Welcome back!</h1>
                 <h2>Login to continue adding more expenses</h2>
