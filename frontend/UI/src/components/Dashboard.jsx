@@ -19,6 +19,33 @@ const Dashboard = () => {
     // states of the components managed by expense Api
     const { data: expenses = [], isLoading, error } = useGetExpensesQuery(user?._id, {skip: !user?._id,});
 
+    // applying the category filter
+    const byCategory = categoryFilter === "all" ? expenses : expenses.filter(f => f.category === categoryFilter)
+
+    // filter by date
+    const filteredExpenses = byCategory.filter(expense => {
+    const expenseDate = new Date(expense.date || expense.createdAt);
+    const now = new Date();
+
+    switch (dateFilter) {
+        case 'today':
+            return expenseDate.toDateString() === now.toDateString();
+
+        case 'week': {
+            const weekAgo = new Date(now);
+            weekAgo.setDate(now.getDate() - 7);
+            return expenseDate >= weekAgo;
+        }
+
+        case 'month':
+            return expenseDate.getMonth()     === now.getMonth() &&
+                   expenseDate.getFullYear()  === now.getFullYear();
+
+        default: // 'all'
+            return true;
+        }
+    });
+
     // in loading phase
     if(isLoading){
         return <h3>Page currently loading...</h3>
@@ -92,9 +119,9 @@ const Dashboard = () => {
                 </div>
             </div>
             <div className="cards-container">
-                {expenses.map((item) => (
+                {filteredExpenses.length > 0 ? filteredExpenses.map((item) => (
                     <ExpensesCard key={item._id} expense={item}/>
-                ))}
+                )) : <p>No Expenses found!</p>}
             </div>
         </div>
     )

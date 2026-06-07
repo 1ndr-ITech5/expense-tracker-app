@@ -9,21 +9,23 @@ const AddExpense = () => {
     const [title, setTitle] = useState("")
     const [amount, setAmount] = useState("")
     const [category, setCategory] = useState("")
+    const [error, setError] = useState("")
     const [addExpense] = useAddExpenseMutation()
 
     //handle sumbit logic
     const handleSubmit = async(e) => {
         e.preventDefault();
+        setError("")
 
         const newExpense = {
             title, amount, category
         }
-    
+
         const result = await addExpense(newExpense)
         if(result.error){
-            console.log(`Mutation failed: ${result.error}`)
+            setError(result.error.data.message)
             return;
-        }
+        }   
 
         setTitle("")
         setAmount("")
@@ -37,6 +39,7 @@ const AddExpense = () => {
             <div className="header-add">
                 <h1>Add your newest expense!</h1>
                 <h3>Fill the fields down below!</h3>
+                {error && <p style={{color: 'red'}}>{error}</p>}
             </div>
             <div className="title">
                 <label>Title</label>
@@ -49,7 +52,7 @@ const AddExpense = () => {
             <div className="category">
                 <label>Category</label>
                 <select onChange={(e) => setCategory(e.target.value)}>
-                    <option value="all">All</option>
+                    <option></option>
                     <option value="Food">Food</option>
                     <option value="Transport">Transport</option>
                     <option value="Entertainment">Entertainment</option>
