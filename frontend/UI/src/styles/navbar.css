@@ -1,3 +1,237 @@
+:root {
+    --page-bg: #ececec;
+    --card-bg: #f3f3f3;
+    --line-color: rgba(0, 0, 0, 0.08);
+    --text-main: #202124;
+    --text-muted: #5b6068;
+    --input-border: #d9dce1;
+    --brand-blue: #1f6feb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--text-main);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    min-height: 100vh;
+}
+
+/* Header layout close to the provided reference */
+.header {
+    height: 74px;
+    padding: 0 24px;
+    border-bottom: 1px solid #d9d9d9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f8f8f8;
+    background-image:
+        linear-gradient(to right, var(--line-color) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line-color) 1px, transparent 1px);
+    background-size: 48px 48px;
+}
+
+.header .logo h4 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header a,
+.header button {
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 18px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.header button {
+    background: #000;
+    color: #fff;
+}
+
+.header a {
+    background: #fff;
+    color: #111;
+    border: 1px solid #dbdbdb;
+}
+
+/* Keep existing protected-pages navbar intact */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 18px;
+    padding: 12px 20px;
+    background: #000;
+    border-bottom: 1px solid #111;
+}
+
 .navbar img {
-    height: 100px;
+    height: 78px;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.navbar h2 {
+    margin: 0 0 0 2px;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}
+
+.navbar nav {
+    margin-left: auto;
+}
+
+.navbar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.navbar a {
+    background: #fff;
+    color: #000;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 9px 14px;
+    border-radius: 6px;
+    border: 1px solid #fff;
+}
+
+.navbar a.active {
+    background: #f2f2f2;
+    color: #000;
+}
+
+.navbar a:hover {
+    background: #f4f4f4;
+    color: #1e1e1e;
+}
+
+/* Login/Register card */
+form:has(.register-info) {
+    width: min(92%, 470px);
+    margin: 56px auto 0;
+    padding: 30px 26px;
+    border-radius: 10px;
+    background: var(--card-bg);
+    border: 1px solid #e7e7e7;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+form:has(.register-info) .register-info {
+    margin-bottom: 18px;
+}
+
+form:has(.register-info) .register-info h1 {
+    margin: 0;
+    text-align: center;
+    font-size: 2rem;
+}
+
+form:has(.register-info) .register-info h2 {
+    margin: 8px 0 0;
+    text-align: center;
+    font-size: 0.98rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+form:has(.register-info) .name,
+form:has(.register-info) .email,
+form:has(.register-info) .password {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+form:has(.register-info) label {
+    font-weight: 600;
+    color: #444;
+}
+
+form:has(.register-info) input {
+    width: 100%;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 0.98rem;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+form:has(.register-info) input:focus {
+    border-color: #8fb2ff;
+    box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.18);
+}
+
+form:has(.register-info) button[type="submit"] {
+    width: 100%;
+    margin-top: 8px;
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--brand-blue);
+    cursor: pointer;
+}
+
+@media (max-width: 640px) {
+    .header {
+        padding: 0 14px;
+        height: 64px;
+    }
+
+    .header .logo h4 {
+        font-size: 0.98rem;
+    }
+
+    .header a,
+    .header button {
+        padding: 8px 12px;
+        font-size: 0.88rem;
+    }
+
+    form:has(.register-info) {
+        margin-top: 22px;
+        padding: 22px 16px;
+    }
+
+    form:has(.register-info) .register-info h1 {
+        font-size: 1.7rem;
+    }
 }

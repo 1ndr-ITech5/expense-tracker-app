@@ -10,6 +10,7 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <img onClick={() => nav("/dashboard")} src={Logo} alt="logo" />
+            <h2>Expense Tracker</h2>
             <nav>
                 <ul>
                     <li>

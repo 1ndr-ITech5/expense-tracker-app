@@ -5,6 +5,7 @@ import ExpensesCard from './ExpensesCard'
 import { setCategoryFilter, setDateFilter } from '../store/filterSlice';
 import {useNavigate} from 'react-router-dom';
 import Spinner from './Spinner';
+import '../styles/dashboard.css';
 
 const Dashboard = () => {
 
@@ -64,13 +65,12 @@ const Dashboard = () => {
     // generate today's expenses
     const todayExpenses = expenses ? expenses.filter(i => i.date.startsWith(today)).reduce((acc, item) => acc + item.amount, 0): 0;
 
-    // generate the avg of expenses by all expenses / all days
-    const uniqueDays = new Set(
-        expenses.map(item => new Date(item.date || item.createdAt).toISOString().split('T')[0])
-    );
-    
-    const totalDaysCount = uniqueDays.size;
-    const avgExpenses = totalDaysCount > 0 ? (totalExpenses / totalDaysCount) : 0;
+    // generate month expenses
+    const monthExpenses = expenses.filter(item => {
+        const expenseDate = new Date(item.date || item.createdAt);
+        const now = new Date();
+        return expenseDate.getMonth()    === now.getMonth() && expenseDate.getFullYear() === now.getFullYear();
+    }).reduce((acc, item) => acc + item.amount, 0);
 
     return (
         <div>
@@ -88,8 +88,8 @@ const Dashboard = () => {
                     <p>{todayExpenses}ALL</p>
                 </div>
                 <div className="info-card">
-                    <h3>Average Expenses</h3>
-                    <p>{avgExpenses}ALL</p>
+                    <h3>This Month Expenses</h3>
+                    <p>{monthExpenses}ALL</p>
                 </div>
             </div>
             <div className="options">
