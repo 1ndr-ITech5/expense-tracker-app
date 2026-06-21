@@ -21,25 +21,23 @@ const ExpensesCard = ({ expense }) => {
   return (
     <div className="expense-card">
 
-      {!updatePage ? (
-        <>
-          <div>
-            <h2>{expense.title}</h2>
-            <h3>{expense.amount} ALL</h3>
-            <h3>{expense.category}</h3>
-          </div>
+      <div>
+        <h2>{expense.title}</h2>
+        <h3>{expense.amount} ALL</h3>
+        <h3>{expense.category}</h3>
+      </div>
 
-          <div>
-            <button onClick={() => setUpdatePage(true)}>
-              <GrDocumentUpdate /> Update
-            </button>
+      <div>
+        <button onClick={() => setUpdatePage(true)}>
+          <GrDocumentUpdate /> Update
+        </button>
 
-            <button onClick={() => handleDelete()}>
-              <MdDelete /> Delete
-            </button>
-          </div>
-        </>
-      ) : (
+        <button onClick={() => handleDelete()}>
+          <MdDelete /> Delete
+        </button>
+      </div>
+
+      {updatePage && (
         <UpdateExpense
           expense={expense}
           setUpdatePage={setUpdatePage}
