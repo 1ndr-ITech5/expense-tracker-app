@@ -4,6 +4,7 @@ import { useState } from "react";
 import UpdateExpense from "./UpdateExpense";
 import { useDeleteExpenseMutation } from '../store/apis/expenseApi';
 import {toast} from 'react-toastify';
+import './ExpensesCard.css';
 
 const ExpensesCard = ({ expense }) => {
   const [updatePage, setUpdatePage] = useState(false);

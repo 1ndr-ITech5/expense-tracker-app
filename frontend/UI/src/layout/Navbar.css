@@ -1,0 +1,84 @@
+/* Global resets and CSS variables — loaded via Navbar since it renders on every protected page */
+:root {
+    --page-bg: #ececec;
+    --card-bg: #f3f3f3;
+    --line-color: rgba(0, 0, 0, 0.08);
+    --text-main: #202124;
+    --text-muted: #5b6068;
+    --input-border: #d9dce1;
+    --brand-blue: #1f6feb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--page-bg);
+    color: var(--text-main);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    min-height: 100vh;
+}
+
+/* Navbar — protected-pages navigation bar */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 18px;
+    padding: 12px 20px;
+    background: #000;
+    border-bottom: 1px solid #111;
+}
+
+.navbar img {
+    height: 78px;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.navbar h2 {
+    margin: 0 0 0 2px;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}
+
+.navbar nav {
+    margin-left: auto;
+}
+
+.navbar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.navbar a {
+    background: #fff;
+    color: #000;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 9px 14px;
+    border-radius: 6px;
+    border: 1px solid #fff;
+}
+
+.navbar a.active {
+    background: #f2f2f2;
+    color: #000;
+}
+
+.navbar a:hover {
+    background: #f4f4f4;
+    color: #1e1e1e;
+}

@@ -1,0 +1,82 @@
+/* Login/Register card — shared between Login.jsx and Register.jsx */
+form:has(.register-info) {
+    width: min(92%, 470px);
+    margin: 56px auto 0;
+    padding: 30px 26px;
+    border-radius: 10px;
+    background: var(--card-bg);
+    border: 1px solid #e7e7e7;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+form:has(.register-info) .register-info {
+    margin-bottom: 18px;
+}
+
+form:has(.register-info) .register-info h1 {
+    margin: 0;
+    text-align: center;
+    font-size: 2rem;
+}
+
+form:has(.register-info) .register-info h2 {
+    margin: 8px 0 0;
+    text-align: center;
+    font-size: 0.98rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+form:has(.register-info) .name,
+form:has(.register-info) .email,
+form:has(.register-info) .password {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+form:has(.register-info) label {
+    font-weight: 600;
+    color: #444;
+}
+
+form:has(.register-info) input {
+    width: 100%;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 0.98rem;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+form:has(.register-info) input:focus {
+    border-color: #8fb2ff;
+    box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.18);
+}
+
+form:has(.register-info) button[type="submit"] {
+    width: 100%;
+    margin-top: 8px;
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--brand-blue);
+    cursor: pointer;
+}
+
+@media (max-width: 640px) {
+    form:has(.register-info) {
+        margin-top: 22px;
+        padding: 22px 16px;
+    }
+
+    form:has(.register-info) .register-info h1 {
+        font-size: 1.7rem;
+    }
+}

@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import {ToastContainer} from 'react-toastify';
-import Dashboard from './components/Dashboard.jsx';
-import Register from './components/Register.jsx';
-import Login from './components/Login.jsx';
-import Header from './components/Header.jsx';
-import AddExpense from './components/AddExpense.jsx';
-import ProtectedLayout from './components/ProtectedLayout.jsx';
-import Profile from './components/Profile.jsx';
+import Dashboard from './dashboard/Dashboard.jsx';
+import Register from './entry/Register.jsx';
+import Login from './entry/Login.jsx';
+import Header from './layout/Header.jsx';
+import AddExpense from './dashboard/AddExpense.jsx';
+import ProtectedLayout from './utils/ProtectedLayout.jsx';
+import Profile from './dashboard/Profile.jsx';
 
 const App = () => {
     return (

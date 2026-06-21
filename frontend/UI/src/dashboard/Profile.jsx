@@ -1,7 +1,7 @@
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import proimg from '../assets/profile.png';
-import '../styles/profile.css';
+import './Profile.css';
 
 const Profile = () => {
 

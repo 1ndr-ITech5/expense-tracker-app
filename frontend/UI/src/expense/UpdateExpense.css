@@ -1,0 +1,192 @@
+/* ── Form styles (shared with AddExpense via .header-add selector) ── */
+
+form:has(.header-add) {
+    width: min(92%, 560px);
+    margin: 34px auto 24px;
+    padding: 28px 26px;
+    background: #fff;
+    border: 1px solid #e2e6ed;
+    border-radius: 14px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+form:has(.header-add) > button[type="button"] {
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    background: #111827;
+    color: #fff;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(17, 24, 39, 0.12);
+}
+
+form:has(.header-add) .header-add {
+    margin-bottom: 18px;
+}
+
+form:has(.header-add) .header-add h1 {
+    margin: 0;
+    font-size: 1.9rem;
+    font-weight: 800;
+}
+
+form:has(.header-add) .header-add h3 {
+    margin: 8px 0 0;
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+form:has(.header-add) .title,
+form:has(.header-add) .amount,
+form:has(.header-add) .category {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+form:has(.header-add) label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #444;
+}
+
+form:has(.header-add) input,
+form:has(.header-add) select {
+    width: 100%;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 0.98rem;
+    background: #fff;
+    outline: none;
+}
+
+form:has(.header-add) input:focus,
+form:has(.header-add) select:focus {
+    border-color: #8fb2ff;
+    box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.18);
+}
+
+form:has(.header-add) > button[type="submit"] {
+    width: 100%;
+    margin-top: 8px;
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    background: #111827;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(17, 24, 39, 0.12);
+}
+
+@media (max-width: 640px) {
+    form:has(.header-add) {
+        width: min(92%, 100%);
+        margin-top: 22px;
+        padding: 22px 16px;
+    }
+
+    form:has(.header-add) .header-add h1 {
+        font-size: 1.55rem;
+    }
+}
+
+/* ── Modal overlay ─────────────────────────────────────────── */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.modal-content {
+    width: min(92%, 520px);
+    background: #fff;
+    border: 1px solid #e2e6ed;
+    border-radius: 14px;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.18);
+    padding: 28px 26px;
+    box-sizing: border-box;
+    animation: modal-in 0.18s ease;
+}
+
+@keyframes modal-in {
+    from { opacity: 0; transform: translateY(-10px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* Close button — matches the dark "primary" button style */
+.modal-close-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 0;
+    border-radius: 8px;
+    padding: 9px 14px;
+    margin-bottom: 16px;
+    background: #111827;
+    color: #fff;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(17, 24, 39, 0.12);
+    transition: background 0.15s;
+}
+
+.modal-close-btn:hover {
+    background: #1f2937;
+}
+
+/* Submit button — full-width blue, matches card Update button hue */
+.modal-submit-btn {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    background: #1258d6;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(18, 88, 214, 0.22);
+    transition: background 0.15s;
+}
+
+.modal-submit-btn:hover {
+    background: #0f4bbf;
+}
+
+/* Keep form inside modal unstyled by the global form:has(.header-add) rule */
+.modal-content form:has(.header-add) {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 20px 16px;
+    }
+}

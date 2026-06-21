@@ -4,6 +4,7 @@ import { MdLogout } from "react-icons/md";
 import { useSelector, useDispatch } from 'react-redux';
 import {logout} from '../store/userSlice';
 import {useNavigate} from 'react-router-dom';
+import './Header.css';
 
 const Header = () => {
 

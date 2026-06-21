@@ -1,11 +1,11 @@
 import { useGetExpensesQuery } from '../store/apis/expenseApi';
 import { useSelector, useDispatch } from 'react-redux';
 import { FaPlus } from "react-icons/fa";
-import ExpensesCard from './ExpensesCard'
+import ExpensesCard from '../expense/ExpensesCard'
 import { setCategoryFilter, setDateFilter } from '../store/filterSlice';
 import {useNavigate} from 'react-router-dom';
-import Spinner from './Spinner';
-import '../styles/dashboard.css';
+import Spinner from '../utils/Spinner';
+import './Dashboard.css';
 
 const Dashboard = () => {
 

@@ -1,6 +1,6 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import Navbar from './Navbar';
+import Navbar from '../layout/Navbar';
 
 const ProtectedLayout = () => {
     const user = useSelector((state) => state.user);

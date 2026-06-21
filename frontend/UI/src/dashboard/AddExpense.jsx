@@ -2,7 +2,7 @@ import { useAddExpenseMutation } from '../store/apis/expenseApi';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {toast} from 'react-toastify';
-import '../styles/addExpense.css';
+import './AddExpense.css';
 
 const AddExpense = () => {
 

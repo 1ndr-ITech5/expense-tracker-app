@@ -1,6 +1,7 @@
 import { useUpdateExpenseMutation } from '../store/apis/expenseApi';
 import { useState } from 'react';
 import {toast} from 'react-toastify';
+import './UpdateExpense.css';
 
 const UpdateExpense = ({expense, setUpdatePage = () => {}}) => {
 
