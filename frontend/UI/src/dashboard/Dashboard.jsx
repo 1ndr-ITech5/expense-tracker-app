@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { FaPlus } from "react-icons/fa";
 import ExpensesCard from '../expense/ExpensesCard'
 import { setCategoryFilter, setDateFilter } from '../store/filterSlice';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Spinner from '../utils/Spinner';
 import './Dashboard.css';
 
@@ -24,57 +24,63 @@ const Dashboard = () => {
     const itemsPerPage = 9;
 
     // states of the components managed by expense Api
-    const { data: expenses = [], isLoading, error } = useGetExpensesQuery(user?._id, {skip: !user?._id,});
+    const { data: expenses = [], isLoading, error } = useGetExpensesQuery(user?._id, { skip: !user?._id, });
 
     // applying the category filter
     const byCategory = categoryFilter === "all" ? expenses : expenses.filter(f => f.category === categoryFilter)
 
     // filter by date
     const filteredExpenses = byCategory.filter(expense => {
-    const expenseDate = new Date(expense.date || expense.createdAt);
-    const now = new Date();
+        const expenseDate = new Date(expense.date || expense.createdAt);
+        const now = new Date();
 
-    switch (dateFilter) {
-        case 'today':
-            return expenseDate.toDateString() === now.toDateString();
+        switch (dateFilter) {
+            case 'today':
+                return expenseDate.toDateString() === now.toDateString();
 
-        case 'week': {
-            const weekAgo = new Date(now);
-            weekAgo.setDate(now.getDate() - 7);
-            return expenseDate >= weekAgo;
-        }
+            case 'week': {
+                const weekAgo = new Date(now);
+                weekAgo.setDate(now.getDate() - 7);
+                return expenseDate >= weekAgo;
+            }
 
-        case 'month':
-            return expenseDate.getMonth()     === now.getMonth() &&
-                   expenseDate.getFullYear()  === now.getFullYear();
+            case 'month':
+                return expenseDate.getMonth() === now.getMonth() &&
+                    expenseDate.getFullYear() === now.getFullYear();
 
-        default: // 'all'
-            return true;
+            default: // 'all'
+                return true;
         }
     });
 
     // in loading phase
-    if(isLoading) {return <Spinner/> }
+    if (isLoading) { return <Spinner /> }
 
     // when error is faced
-    if(error){
+    if (error) {
         return <h3>Page faced error: {error?.data?.message || 'Data not fetched!'}</h3>
     }
 
     // get today's date
     const today = new Date().toISOString().split('T')[0];
 
-    // generate all the expenses done by user
-    const totalExpenses = expenses ? expenses.reduce((acc, item) => acc + item.amount , 0) : 0
+    // generate last month expenses
+    const lastMonthExpenses = expenses.filter(item => {
+        const expenseDate = new Date(item.date || item.createdAt);
+        const now = new Date();
+        const lastMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1;
+        const yearOfLastMonth = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();
+        return expenseDate.getMonth() === lastMonth && expenseDate.getFullYear() === yearOfLastMonth;
+    }).reduce((acc, item) => acc + item.amount, 0);
 
     // generate today's expenses
-    const todayExpenses = expenses ? expenses.filter(i => i.date.startsWith(today)).reduce((acc, item) => acc + item.amount, 0): 0;
+    const todayExpenses = expenses ? expenses.filter(i => i.date.startsWith(today)).reduce((acc, item) => acc + item.amount, 0) : 0;
 
     // generate month expenses
     const monthExpenses = expenses.filter(item => {
         const expenseDate = new Date(item.date || item.createdAt);
         const now = new Date();
-        return expenseDate.getMonth()    === now.getMonth() && expenseDate.getFullYear() === now.getFullYear();
+        return expenseDate.getMonth() === now.getMonth() && expenseDate.getFullYear() === now.getFullYear();
     }).reduce((acc, item) => acc + item.amount, 0);
 
     // pagination logic
@@ -91,16 +97,16 @@ const Dashboard = () => {
             </div>
             <div className="info-tables">
                 <div className="info-card">
-                    <h3>Total Expenses</h3>
-                    <p>{totalExpenses}ALL</p>
+                    <h3>Last Month Expenses</h3>
+                    <p>{lastMonthExpenses} ALL</p>
                 </div>
                 <div className="info-card">
                     <h3>Today Expenses</h3>
-                    <p>{todayExpenses}ALL</p>
+                    <p>{todayExpenses} ALL</p>
                 </div>
                 <div className="info-card">
                     <h3>This Month Expenses</h3>
-                    <p>{monthExpenses}ALL</p>
+                    <p>{monthExpenses} ALL</p>
                 </div>
             </div>
             <div className="options">
@@ -115,7 +121,7 @@ const Dashboard = () => {
                         <option value="Shopping">Shopping</option>
                         <option value="Bills">Bills</option>
                         <option value="Health">Health</option>
-                        <option value="Other">Other</option>               
+                        <option value="Other">Other</option>
                     </select>
                 </div>
                 <div>
@@ -130,28 +136,28 @@ const Dashboard = () => {
             </div>
             <div className="cards-container">
                 {currentExpenses.length > 0 ? currentExpenses.map((item) => (
-                    <ExpensesCard key={item._id} expense={item}/>
+                    <ExpensesCard key={item._id} expense={item} />
                 )) : <p>No Expenses found!</p>}
             </div>
             {totalPages > 1 && (
                 <div className="pagination">
-                    <button 
-                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 
+                    <button
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={actualPage === 1}
                     >
                         &laquo; Prev
                     </button>
                     {[...Array(totalPages)].map((_, index) => (
-                        <button 
-                            key={index + 1} 
+                        <button
+                            key={index + 1}
                             onClick={() => setCurrentPage(index + 1)}
                             className={actualPage === index + 1 ? "active" : ""}
                         >
                             {index + 1}
                         </button>
                     ))}
-                    <button 
-                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} 
+                    <button
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={actualPage === totalPages}
                     >
                         Next &raquo;
