@@ -148,3 +148,39 @@ div:has(.dash-info) {
         font-size: 1.6rem;
     }
 }
+
+/* Pagination styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.pagination button {
+    border: 1px solid #d7dce3;
+    background: #fff;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-main);
+    transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background: #f0f2f5;
+}
+
+.pagination button.active {
+    background: #111827;
+    color: #fff;
+    border-color: #111827;
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

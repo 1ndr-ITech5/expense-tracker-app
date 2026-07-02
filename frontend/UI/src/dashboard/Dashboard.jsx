@@ -1,5 +1,6 @@
 import { useGetExpensesQuery } from '../store/apis/expenseApi';
 import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { FaPlus } from "react-icons/fa";
 import ExpensesCard from '../expense/ExpensesCard'
 import { setCategoryFilter, setDateFilter } from '../store/filterSlice';
@@ -17,6 +18,10 @@ const Dashboard = () => {
 
     // initial states of filters
     const { categoryFilter, dateFilter } = useSelector((state) => state.filters);
+
+    // pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 9;
 
     // states of the components managed by expense Api
     const { data: expenses = [], isLoading, error } = useGetExpensesQuery(user?._id, {skip: !user?._id,});
@@ -72,6 +77,12 @@ const Dashboard = () => {
         return expenseDate.getMonth()    === now.getMonth() && expenseDate.getFullYear() === now.getFullYear();
     }).reduce((acc, item) => acc + item.amount, 0);
 
+    // pagination logic
+    const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
+    const actualPage = currentPage > totalPages ? (totalPages > 0 ? totalPages : 1) : currentPage;
+    const startIndex = (actualPage - 1) * itemsPerPage;
+    const currentExpenses = filteredExpenses.slice(startIndex, startIndex + itemsPerPage);
+
     return (
         <div>
             <div className="dash-info">
@@ -118,10 +129,35 @@ const Dashboard = () => {
                 </div>
             </div>
             <div className="cards-container">
-                {filteredExpenses.length > 0 ? filteredExpenses.map((item) => (
+                {currentExpenses.length > 0 ? currentExpenses.map((item) => (
                     <ExpensesCard key={item._id} expense={item}/>
                 )) : <p>No Expenses found!</p>}
             </div>
+            {totalPages > 1 && (
+                <div className="pagination">
+                    <button 
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 
+                        disabled={actualPage === 1}
+                    >
+                        &laquo; Prev
+                    </button>
+                    {[...Array(totalPages)].map((_, index) => (
+                        <button 
+                            key={index + 1} 
+                            onClick={() => setCurrentPage(index + 1)}
+                            className={actualPage === index + 1 ? "active" : ""}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+                    <button 
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} 
+                        disabled={actualPage === totalPages}
+                    >
+                        Next &raquo;
+                    </button>
+                </div>
+            )}
         </div>
     )
 }
