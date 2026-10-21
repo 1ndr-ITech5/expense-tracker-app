@@ -4,7 +4,7 @@ export const expenseApi = createApi({
   reducerPath: "expenseApi",
   tagTypes: ['Expense'],
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/`,
+    baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/expenses`,
     prepareHeaders: (headers, { getState }) => {
       const token = getState()?.user?.token || JSON.parse(localStorage.getItem('user'))?.token;
 
@@ -18,13 +18,16 @@ export const expenseApi = createApi({
 
   endpoints: (builder) => ({
     getExpenses: builder.query({
-      query: () => "expenses",
+      query: () => ({
+        url: "",
+        method: "GET"
+      }),
       providesTags: ['Expense'],
     }),
 
     addExpense: builder.mutation({
       query: (newExpense) => ({
-        url: "expenses",
+        url: "",
         method: "POST",
         body: newExpense,
       }),
@@ -33,7 +36,7 @@ export const expenseApi = createApi({
 
     updateExpense: builder.mutation({
       query: ({ id, updatedData }) => ({
-        url: `expenses/${id}`,
+        url: `/${id}`,
         method: "PUT",
         body: updatedData,
       }),
@@ -42,7 +45,7 @@ export const expenseApi = createApi({
 
     deleteExpense: builder.mutation({
       query: (id) => ({
-        url: `expenses/${id}`,
+        url: `/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ['Expense'],
