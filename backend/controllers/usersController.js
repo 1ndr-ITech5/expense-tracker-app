@@ -7,16 +7,25 @@ const registerUser = asyncHandler(async(req,res) => {
     // destruct the user's info from req.body
     const {name, email, password} = req.body
 
+    // check that the inputed fields are in string data type format
+    if (typeof name !== "string" || typeof email !== "string" || typeof password !== "string"){
+        res.status(409)
+        throw new Error("The inputed fields should be in string data type!")
+    }
+
+    const clearName = name.trim()
+    const validEmail = email.trim().toLowerCase()
+
     // check if the given fields are filled
-    if (!name || !email || !password){
+    if (!clearName || !validEmail || !password){
         res.status(400)
         throw new Error("Please fill all the fields!!")
     }
 
     // check if the given email already exists on db
-    const user = await User.findOne({email})
+    const user = await User.findOne({email: validEmail})
     if (user) {
-        res.status(400)
+        res.status(409)
         throw new Error("This user already exists on the database!")
     }
 
@@ -25,23 +34,29 @@ const registerUser = asyncHandler(async(req,res) => {
     const hashedPassword = await bcrypt.hash(password, salt)
 
     // create the user on database
-    const newUser = await User.create({
-        name, email, password: hashedPassword
-    })
+    let newUser;
 
-    // check if the user its created, return a json file with his info
-    if (newUser){
-        res.status(201).json({
-            _id: newUser._id,
-            name: newUser.name,
-            email: newUser.email,
-            token: tokenGeneration(newUser._id),
-            createdAt: newUser.createdAt
-        })
-    }else{
-        res.status(400)
-        throw new Error("Invalid data!")
+    try {
+        newUser = await User.create({
+            name: clearName,
+            email: validEmail,
+            password: hashedPassword
+        });
+    } catch (error) {
+        // 11000 = duplicate key nga indeksi unik (mbulon race condition)
+        if (error.code === 11000) {
+            res.status(409);
+            throw new Error("This user already exists on the database!");
+        }
+        throw error;
     }
+
+    res.status(201).json({
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        token: tokenGeneration(newUser._id),
+        createdAt: newUser.createdAt })
 })
 
 const logUser = asyncHandler(async(req, res) => {
