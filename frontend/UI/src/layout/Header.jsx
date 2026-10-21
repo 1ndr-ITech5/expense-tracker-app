@@ -1,4 +1,4 @@
-import { FaSignInAlt, FaSignOutAlt, FaUser } from 'react-icons/fa'
+import { FaSignInAlt, FaUser } from 'react-icons/fa'
 import { Link } from 'react-router';
 import { MdLogout } from "react-icons/md";
 import { useSelector, useDispatch } from 'react-redux';
