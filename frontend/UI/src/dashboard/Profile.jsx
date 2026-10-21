@@ -1,15 +1,25 @@
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useGetExpensesQuery } from '../store/apis/expenseApi';
+import {useGetUserQuery} from "../store/apis/authApi.js";
+import Spinner from "../utils/Spinner.jsx";
 import proimg from '../assets/profile.png';
 import './Profile.css';
 
 const Profile = () => {
-
     const nav = useNavigate();
 
-    const { user } = useSelector((state) => state.user);
-    const { data: expenses = [] } = useGetExpensesQuery(user?._id, { skip: !user?._id, });
+    const {data: user, isLoading: profileLoading} = useGetUserQuery();
+    const { data: expenses = [], isLoading: expensesLoading } = useGetExpensesQuery(user?._id, { skip: !user?._id, });
+    console.log(user)
+
+    if(profileLoading || expensesLoading){
+        return (
+            <div>
+                <h1>Loading user's profile data...</h1>
+                <Spinner/>
+            </div>
+        )
+    }
 
     const totalExpenses = expenses ? expenses.reduce((acc, item) => acc + item.amount, 0) : 0;
 

@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import authService from '../services/authService.js'
+import {useRegisterUserMutation} from '../store/apis/authApi.js';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import { setUser } from '../store/userSlice';
@@ -7,20 +7,31 @@ import {toast} from 'react-toastify';
 import './Register.css';
 
 const Register = () => {
-
-    // defining the states
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-
     const nav = useNavigate()
     const dispatch = useDispatch();
+
+    const [registerUser, {isLoading}] = useRegisterUserMutation();
+
+    const [registerData, setRegisterData] = useState({
+        name: "",
+        email: "",
+        password: ""
+    })
+
+    const handleRegisterData = (e) => {
+        const {name, value} = e.target
+
+        setRegisterData((prevData) => ({
+            ...prevData,
+            [name]: value
+        })) 
+    }
 
     const handleSubmit = async(e) => {
         e.preventDefault(); // makes sure to not re-render the page after submit event
 
         try{
-            const userData = await authService.register({name,email,password})
+            const userData = await registerUser(registerData)
             toast.success("User registered! Welcome!")
             dispatch(setUser(userData))
             nav("/dashboard")
@@ -37,17 +48,20 @@ const Register = () => {
             </div>
             <div className="name">
                 <label>Name</label>
-                <input type="text" placeholder="Write your name..." value={name} onChange={(e) => setName(e.target.value)}></input>
+                <input type="text" name="name" placeholder="Write your name..." 
+                    value={registerData.name} onChange={(e) => handleRegisterData(e)}></input>
             </div>
             <div className="email">
                 <label>Email</label>
-                <input type="email" placeholder="Write your email..." value={email} onChange={(e) => setEmail(e.target.value)}></input>
+                <input type="email" name="email" placeholder="Write your email..." 
+                    value={registerData.email} onChange={(e) => handleRegisterData(e)}></input>
             </div>
             <div className="password">
                 <label>Password</label>
-                <input type="password" placeholder="Type your passcode..." value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                <input type="password" name="password" placeholder="Type your passcode..." 
+                    value={registerData.password} onChange={(e) => handleRegisterData(e)}></input>
             </div>
-            <button type="submit">Sign In</button>
+            <button type="submit" disabled={isLoading}>Sign In</button>
         </form>
     )
 }

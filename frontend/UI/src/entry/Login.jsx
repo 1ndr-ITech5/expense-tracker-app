@@ -1,30 +1,43 @@
 import {useState} from 'react'
-import authService from '../services/authService.js'
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import { setUser } from '../store/userSlice';
+import {useLoginUserMutation} from "../store/apis/authApi.js"
 import {toast} from 'react-toastify';
 import './Login.css';
 
 const Login = () => {
-
-    // defining the states
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-
     const nav = useNavigate()
     const dispatch = useDispatch();
+
+    const [loginUser, {isLoading}] = useLoginUserMutation();
+
+    const [loginData, setLoginData] = useState({
+        email: "",
+        password: ""
+    })
+
+    const handleLoginData = (e) => {
+        const {name, value} = e.target
+
+        setLoginData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }))
+    }
 
     const handleSubmit = async(e) => {
         e.preventDefault(); // makes sure to not re-render the page after submit event
 
         try{
-            const userData = await authService.login({email,password})
+            const userData = await loginUser(loginData).unwrap()
             toast.success("User logged successfully!")
+            console.log(userData)
             dispatch(setUser(userData))
             nav("/dashboard")
         }catch (error) {
-            toast.error(error.response?.data?.message || 'Something went wrong!')
+            console.log(error)
+            toast.error(error.data?.message || 'Something went wrong!')
         }
     }
 
@@ -36,13 +49,15 @@ const Login = () => {
             </div>
             <div className="email">
                 <label>Email</label>
-                <input type="email" placeholder="Write your email..." value={email} onChange={(e) => setEmail(e.target.value)}></input>
+                <input type="email" name="email" placeholder="Write your email..." 
+                    value={loginData.email} onChange={(e) => handleLoginData(e)}></input>
             </div>
             <div className="password">
                 <label>Password</label>
-                <input type="password" placeholder="Type your passcode..." value={password} onChange={(e) => setPassword(e.target.value)}></input>
+                <input type="password" name="password" placeholder="Type your passcode..." 
+                    value={loginData.password} onChange={(e) => handleLoginData(e)}></input>
             </div>
-            <button type="submit">Log In</button>
+            <button type="submit" disabled={isLoading}>Log In</button>
         </form>
     )
 }
