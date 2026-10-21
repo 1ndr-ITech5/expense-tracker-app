@@ -6,6 +6,7 @@ import Login from './entry/Login.jsx';
 import Header from './layout/Header.jsx';
 import AddExpense from './dashboard/AddExpense.jsx';
 import ProtectedLayout from './utils/ProtectedLayout.jsx';
+import PublicRoutes from './utils/PublicRoutes.jsx';
 import Profile from './dashboard/Profile.jsx';
 
 const App = () => {
@@ -15,10 +16,11 @@ const App = () => {
                 <Header />
                 <Routes>
                     {/*Pages without navbar*/}
-                    <Route path="/" element={<Navigate to="/login" replace />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-
+                    <Route element={<PublicRoutes />}>
+                        <Route path="/" element={<Navigate to="/login" replace />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                    </Route>
                     {/*Pages with navbar*/}
                     <Route element={<ProtectedLayout />}>
                         <Route path="/dashboard" element={<Dashboard />} />
