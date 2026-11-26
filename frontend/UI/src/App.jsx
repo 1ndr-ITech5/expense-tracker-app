@@ -5,8 +5,8 @@ import Register from './entry/Register.jsx';
 import Login from './entry/Login.jsx';
 import Header from './layout/Header.jsx';
 import AddExpense from './dashboard/AddExpense.jsx';
-import ProtectedLayout from './utils/ProtectedLayout.jsx';
-import PublicRoutes from './utils/PublicRoutes.jsx';
+import ProtectedLayout from './layout/ProtectedLayout.jsx';
+import PublicRoutes from './layout/PublicRoutes.jsx';
 import Profile from './dashboard/Profile.jsx';
 
 const App = () => {

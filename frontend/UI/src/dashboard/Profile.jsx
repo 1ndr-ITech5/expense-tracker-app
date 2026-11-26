@@ -10,13 +10,24 @@ const Profile = () => {
 
     const {data: user, isLoading: profileLoading} = useGetUserQuery();
     const { data: expenses = [], isLoading: expensesLoading } = useGetExpensesQuery(user?._id, { skip: !user?._id, });
-    console.log(user)
 
     if(profileLoading || expensesLoading){
         return (
-            <div>
+            <div className="page-loading">
                 <h1>Loading user's profile data...</h1>
                 <Spinner/>
+            </div>
+        )
+    }
+
+    if(!user){
+        return (
+            <div className="no-profile">
+                <div className="no-profile-card">
+                    <h1>User's data was not found!</h1>
+                    <h2>Try to refresh page or go to dashboard page!</h2>
+                    <button onClick={() => nav("/dashboard")}>Go to Dashboard</button>
+                </div>
             </div>
         )
     }
