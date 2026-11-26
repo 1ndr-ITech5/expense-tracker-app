@@ -2,6 +2,8 @@ import {useState} from 'react'
 import {useRegisterUserMutation} from '../store/apis/authApi.js';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
+import { FaRegEyeSlash } from "react-icons/fa6";
+import { FaRegEye } from "react-icons/fa6";
 import { setUser } from '../store/userSlice';
 import {toast} from 'react-toastify';
 import './Register.css';
@@ -18,6 +20,8 @@ const Register = () => {
         password: ""
     })
 
+    const [seePassword, setVisibility] = useState(false)
+
     const handleRegisterData = (e) => {
         const {name, value} = e.target
 
@@ -28,7 +32,7 @@ const Register = () => {
     }
 
     const handleSubmit = async(e) => {
-        e.preventDefault(); // makes sure to not re-render the page after submit event
+        e.preventDefault();
 
         try{
             const userData = await registerUser(registerData)
@@ -58,8 +62,16 @@ const Register = () => {
             </div>
             <div className="password">
                 <label>Password</label>
-                <input type="password" name="password" placeholder="Type your passcode..." 
-                    value={registerData.password} onChange={(e) => handleRegisterData(e)}></input>
+                    <div className="password-field">
+                        <input
+                            type={seePassword ? "text" : "password"}
+                            name="password" placeholder="Type your passcode..."
+                            value={registerData.password} onChange={(e) => handleRegisterData(e)}/>
+                        <button
+                            type="button" className="toggle-visibility" onClick={() => setVisibility(!seePassword)}>
+                                {seePassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                        </button>
+                    </div>
             </div>
             <button type="submit" disabled={isLoading}>Sign In</button>
         </form>
