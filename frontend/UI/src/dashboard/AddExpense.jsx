@@ -7,36 +7,38 @@ import './AddExpense.css';
 const AddExpense = () => {
 
     const nav = useNavigate();
+    const [addExpense, {isLoading: creatingExpense}] = useAddExpenseMutation()
 
-    const [title, setTitle] = useState("")
-    const [amount, setAmount] = useState("")
-    const [category, setCategory] = useState("")
-    const [addExpense] = useAddExpenseMutation()
+    const [newExpense, setExpense] = useState({
+        title: "",
+        amount: "",
+        category: ""
+    })
+
+    const handleSetExpense = (e) => {
+        const {name, value} = e.target;
+
+        setExpense(prevData => ({
+            ...prevData,
+            [name]: value
+        }))
+    }
 
     //handle sumbit logic
     const handleSubmit = async(e) => {
         e.preventDefault();
 
-
-        const newExpense = {
-            title, amount, category
+        try{
+            await addExpense(newExpense).unwrap()
+            toast.success("Expense created successfully!")
+            nav("/dashboard")
+        }catch(error){
+            toast.error(error?.data?.message)
         }
-
-        const result = await addExpense(newExpense)
-        if(result.error){
-            toast.error(result.error.data.message)
-            return;
-        }   
-
-        toast.success("Expense created successfully!")
-        setTitle("")
-        setAmount("")
-        setCategory("")
-        nav("/dashboard")
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(e)}>
             <button type="button" onClick={() => nav(-1)}>Go Back</button>
             <div className="header-add">
                 <h1>Add your newest expense!</h1>
@@ -44,15 +46,15 @@ const AddExpense = () => {
             </div>
             <div className="title">
                 <label>Title</label>
-                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                <input type="text" name="title" value={newExpense.title} onChange={(e) => handleSetExpense(e)}/>
             </div>
             <div className="amount">
                 <label>Amount</label>
-                <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)}/>
+                <input type="number" name="amount" value={newExpense.amount} onChange={(e) => handleSetExpense(e)}/>
             </div>
             <div className="category">
                 <label>Category</label>
-                <select onChange={(e) => setCategory(e.target.value)}>
+                <select name="category" onChange={(e) => handleSetExpense(e)}>
                     <option></option>
                     <option value="Food">Food</option>
                     <option value="Transport">Transport</option>
@@ -63,7 +65,7 @@ const AddExpense = () => {
                     <option value="Other">Other</option>
                 </select>
             </div>
-            <button>Add Expense</button>
+            <button disabled={creatingExpense}>Add Expense</button>
         </form>
     )
 }
