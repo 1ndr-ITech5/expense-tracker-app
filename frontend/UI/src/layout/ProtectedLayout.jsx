@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Navbar from '../layout/Navbar';
 
 const ProtectedLayout = () => {
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.user.user);
 
     if (!user) return <Navigate to="/login" replace />;
 
