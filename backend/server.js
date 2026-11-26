@@ -15,6 +15,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.get("/health", (req, res) => res.status(200).send("OK"));
+
 // endpoint for expenses operations
 app.use("/api/expenses", require("./routes/expensesRoute"))
 
