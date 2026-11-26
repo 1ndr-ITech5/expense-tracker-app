@@ -19,6 +19,10 @@ const Dashboard = () => {
     const { data: expenses = [], isLoading, error } = useGetExpensesQuery(user?._id, { skip: !user?._id, });
 
     const { categoryFilter, dateFilter } = useSelector((state) => state.filters);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 9;
+    
     const filteredExpenses = applyFilters(expenses, categoryFilter, dateFilter);
 
     // in loading phase
@@ -30,10 +34,6 @@ const Dashboard = () => {
     }
 
     const stats = getExpenseStats(expenses);
-
-    // pagination logic
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 9;
 
     const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
     const actualPage = currentPage > totalPages ? (totalPages > 0 ? totalPages : 1) : currentPage;
