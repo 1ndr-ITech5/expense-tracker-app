@@ -1,20 +1,36 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {logout} from "../userSlice.js";
+import {toast} from "react-toastify";
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/expenses`,
+  prepareHeaders: (headers, { getState }) => {
+    const token = getState()?.user?.token || JSON.parse(localStorage.getItem('user'))?.token;
+
+    if (token) {
+      headers.set("authorization", `Bearer ${token}`);
+    }
+
+    return headers;
+  }
+})
+
+const baseQueryWithAuth = async (args, api, extraOptions) => {
+  const result = await baseQuery(args, api, extraOptions)
+
+  if (result.error?.status === 401) {
+      toast.error(result?.error?.data?.message)
+      api.dispatch(logout())
+      api.dispatch(expenseApi.util.resetApiState());
+  }
+
+  return result;
+}; 
 
 export const expenseApi = createApi({
   reducerPath: "expenseApi",
   tagTypes: ['Expense'],
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/expenses`,
-    prepareHeaders: (headers, { getState }) => {
-      const token = getState()?.user?.token || JSON.parse(localStorage.getItem('user'))?.token;
-
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithAuth,
 
   endpoints: (builder) => ({
     getExpenses: builder.query({
