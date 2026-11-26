@@ -1,3 +1,10 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
 div:has(.dash-info) {
     position: relative;
 }
@@ -58,6 +65,7 @@ div:has(.dash-info) {
     margin: 16px auto 0;
     padding: 0 18px;
     display: flex;
+    justify-content: center;
     align-items: flex-start;
     gap: 12px;
     flex-wrap: wrap;
@@ -78,7 +86,16 @@ div:has(.dash-info) {
     box-shadow: 0 8px 18px rgba(17, 24, 39, 0.12);
 }
 
-.options > div {
+.filters {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    text-align: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.filters > div {
     min-width: 170px;
     padding: 10px 12px;
     background: #fff;
@@ -89,13 +106,13 @@ div:has(.dash-info) {
     gap: 6px;
 }
 
-.options label {
+.filters label {
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-muted);
 }
 
-.options select {
+.filters select {
     width: 100%;
     border: 1px solid #ccd2da;
     border-radius: 3px;

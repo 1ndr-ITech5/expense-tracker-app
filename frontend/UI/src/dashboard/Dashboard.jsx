@@ -41,7 +41,7 @@ const Dashboard = () => {
     const currentExpenses = filteredExpenses.slice(startIndex, startIndex + itemsPerPage);
 
     return (
-        <div>
+        <div className="dashboard">
             <div className="dash-info">
                 <h1>Hello {user ? user.name : 'Guest'}👋</h1>
                 <h3>What have you spent today?</h3>
@@ -53,27 +53,29 @@ const Dashboard = () => {
             </div>
             <div className="options">
                 <button onClick={() => nav("/add-expense")}>{<FaPlus />} Add New Expense</button>
-                <div>
-                    <label>Filter by Category</label>
-                    <select onChange={(e) => dispatch(setCategoryFilter(e.target.value))}>
-                        <option value="all">All</option>
-                        <option value="Food">Food</option>
-                        <option value="Transport">Transport</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Shopping">Shopping</option>
-                        <option value="Bills">Bills</option>
-                        <option value="Health">Health</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Filter by Period</label>
-                    <select onChange={(e) => dispatch(setDateFilter(e.target.value))}>
-                        <option value="all">All</option>
-                        <option value="today">Today</option>
-                        <option value="week">This Week</option>
-                        <option value="month">This Month</option>
-                    </select>
+                <div className="filters">
+                    <div>
+                        <label>Filter by Category</label>
+                        <select onChange={(e) => dispatch(setCategoryFilter(e.target.value))}>
+                            <option value="all">All</option>
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Bills">Bills</option>
+                            <option value="Health">Health</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Filter by Period</label>
+                        <select onChange={(e) => dispatch(setDateFilter(e.target.value))}>
+                            <option value="all">All</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div className="cards-container">
