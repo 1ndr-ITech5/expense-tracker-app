@@ -2,56 +2,24 @@ import { useGetExpensesQuery } from '../store/apis/expenseApi';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { FaPlus } from "react-icons/fa";
-import ExpensesCard from '../expense/ExpensesCard'
+import ExpensesCard from '../expense/ExpensesCard';
+import InfoCard from "../cards/InfoCard.jsx";
+import {applyFilters} from "../utils/Filter.js";
+import { getExpenseStats } from '../utils/Stats.js';
 import { setCategoryFilter, setDateFilter } from '../store/filterSlice';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../utils/Spinner';
 import './Dashboard.css';
 
 const Dashboard = () => {
-
     const nav = useNavigate();
-    // init our postman here
     const dispatch = useDispatch();
 
-    const { user } = useSelector((state) => state.user);
-
-    // initial states of filters
-    const { categoryFilter, dateFilter } = useSelector((state) => state.filters);
-
-    // pagination state
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 9;
-
-    // states of the components managed by expense Api
+    const user = useSelector((state) => state.user.user);
     const { data: expenses = [], isLoading, error } = useGetExpensesQuery(user?._id, { skip: !user?._id, });
 
-    // applying the category filter
-    const byCategory = categoryFilter === "all" ? expenses : expenses.filter(f => f.category === categoryFilter)
-
-    // filter by date
-    const filteredExpenses = byCategory.filter(expense => {
-        const expenseDate = new Date(expense.date || expense.createdAt);
-        const now = new Date();
-
-        switch (dateFilter) {
-            case 'today':
-                return expenseDate.toDateString() === now.toDateString();
-
-            case 'week': {
-                const weekAgo = new Date(now);
-                weekAgo.setDate(now.getDate() - 7);
-                return expenseDate >= weekAgo;
-            }
-
-            case 'month':
-                return expenseDate.getMonth() === now.getMonth() &&
-                    expenseDate.getFullYear() === now.getFullYear();
-
-            default: // 'all'
-                return true;
-        }
-    });
+    const { categoryFilter, dateFilter } = useSelector((state) => state.filters);
+    const filteredExpenses = applyFilters(expenses, categoryFilter, dateFilter);
 
     // in loading phase
     if (isLoading) { return <Spinner /> }
@@ -61,29 +29,12 @@ const Dashboard = () => {
         return <h3>Page faced error: {error?.data?.message || 'Data not fetched!'}</h3>
     }
 
-    // get today's date
-    const today = new Date().toISOString().split('T')[0];
-
-    // generate last month expenses
-    const lastMonthExpenses = expenses.filter(item => {
-        const expenseDate = new Date(item.date || item.createdAt);
-        const now = new Date();
-        const lastMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1;
-        const yearOfLastMonth = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();
-        return expenseDate.getMonth() === lastMonth && expenseDate.getFullYear() === yearOfLastMonth;
-    }).reduce((acc, item) => acc + item.amount, 0);
-
-    // generate today's expenses
-    const todayExpenses = expenses ? expenses.filter(i => i.date.startsWith(today)).reduce((acc, item) => acc + item.amount, 0) : 0;
-
-    // generate month expenses
-    const monthExpenses = expenses.filter(item => {
-        const expenseDate = new Date(item.date || item.createdAt);
-        const now = new Date();
-        return expenseDate.getMonth() === now.getMonth() && expenseDate.getFullYear() === now.getFullYear();
-    }).reduce((acc, item) => acc + item.amount, 0);
+    const stats = getExpenseStats(expenses);
 
     // pagination logic
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 9;
+
     const totalPages = Math.ceil(filteredExpenses.length / itemsPerPage);
     const actualPage = currentPage > totalPages ? (totalPages > 0 ? totalPages : 1) : currentPage;
     const startIndex = (actualPage - 1) * itemsPerPage;
@@ -96,18 +47,9 @@ const Dashboard = () => {
                 <h3>What have you spent today?</h3>
             </div>
             <div className="info-tables">
-                <div className="info-card">
-                    <h3>Last Month Expenses</h3>
-                    <p>{lastMonthExpenses} ALL</p>
-                </div>
-                <div className="info-card">
-                    <h3>Today Expenses</h3>
-                    <p>{todayExpenses} ALL</p>
-                </div>
-                <div className="info-card">
-                    <h3>This Month Expenses</h3>
-                    <p>{monthExpenses} ALL</p>
-                </div>
+                <InfoCard title="Last Month" expenses={stats.lastMonth}/>
+                <InfoCard title="Today" expenses={stats.today}/>
+                <InfoCard title="This Month" expenses={stats.month}/>
             </div>
             <div className="options">
                 <button onClick={() => nav("/add-expense")}>{<FaPlus />} Add New Expense</button>
