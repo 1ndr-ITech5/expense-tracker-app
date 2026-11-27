@@ -5,7 +5,14 @@ import {toast} from "react-toastify";
 const baseQuery = fetchBaseQuery({
   baseUrl: `${import.meta.env.VITE_API_BASE_URL}/api/expenses`,
   prepareHeaders: (headers, { getState }) => {
-    const token = getState()?.user?.token || JSON.parse(localStorage.getItem('user'))?.token;
+    const stateUser = getState()?.user?.user;
+    const localUser = JSON.parse(localStorage.getItem('user') || 'null');
+
+    const token =
+      stateUser?.token ||
+      stateUser?.data?.token ||
+      localUser?.token ||
+      localUser?.data?.token;
 
     if (token) {
       headers.set("authorization", `Bearer ${token}`);
