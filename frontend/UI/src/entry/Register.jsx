@@ -35,7 +35,7 @@ const Register = () => {
         e.preventDefault();
 
         try{
-            const userData = await registerUser(registerData)
+            const userData = await registerUser(registerData).unwrap()
             toast.success("User registered! Welcome!")
             dispatch(setUser(userData))
             nav("/dashboard")
